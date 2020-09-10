@@ -8,12 +8,13 @@ from wtforms.validators import DataRequired
 import os
 from flask_sqlalchemy import SQLAlchemy
 basedir = os.path.abspath(os.path.dirname(__file__))
+from flask_migrate import Migrate
 
 app = Flask(__name__)  
 moment = Moment(app)
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'hard to guess string'
-app.config['SQLALCHEMY_DATABASE_URL'] =\
+app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICHATIONS'] = False
 
@@ -73,3 +74,5 @@ class User(db.Model):
 @app.shell_context_processor
 def make_shell_context():
     return dict(db=db, User=User, Role=Role)
+
+migrate = Migrate(app, db)
